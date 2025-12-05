@@ -1,131 +1,226 @@
-/* =========================
-   RESET + BASE
-========================= */
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
-    font-family: "Segoe UI", system-ui, sans-serif;
 }
 
+/* ===== BODY CENTRADO REAL ===== */
 body {
-    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
-    background: linear-gradient(135deg, #ff5252, #ff9800, #4caf50);
-    background-size: 300% 300%;
-    animation: fondo 12s ease infinite;
-    color: #333;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
     overflow-x: hidden;
 }
 
-@keyframes fondo {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-/* =========================
-   CONTENEDOR PRINCIPAL
-========================= */
+/* ===== CONTENEDOR PRINCIPAL ===== */
 #app {
-    max-width: 850px;
-    margin: 40px auto;
-    padding: 32px;
-    background: rgba(255, 255, 255, 0.92);
-    border-radius: 18px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    max-width: 800px;
+    width: 100%;
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     position: relative;
     z-index: 2;
 }
 
-/* =========================
-   TÍTULOS
-========================= */
-h1,
-h2,
-h3 {
+/* ===== TITULOS ===== */
+h1 {
+    color: #667eea;
     text-align: center;
-    color: #c62828;
+    margin-bottom: 10px;
+    font-size: 2.5em;
 }
 
-h2::before {
-    content: "🎄 ";
+.subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 1.1em;
 }
 
-h2::after {
-    content: " 🎁";
+h2 {
+    color: #764ba2;
+    margin-bottom: 15px;
+    font-size: 1.5em;
 }
 
-/* =========================
-   TEXTAREAS
-========================= */
+/* ===== SECCIONES ===== */
+.section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+/* ===== TEXTAREAS ===== */
 textarea {
     width: 100%;
     min-height: 120px;
-    padding: 14px;
-    margin-top: 10px;
-    border-radius: 12px;
-    border: 2px solid #ffccbc;
-    background: #fff8f6;
-    font-size: 16px;
-    outline: none;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    font-family: monospace;
     resize: vertical;
+    transition: filter 0.3s, border-color 0.3s;
 }
 
 textarea:focus {
-    border-color: #ff7043;
-    box-shadow: 0 0 0 2px rgba(255, 112, 67, 0.2);
+    outline: none;
+    border-color: #667eea;
 }
 
-/* =========================
-   BOTONES
-========================= */
+/* ===== BLUR DE MISIONES ===== */
+textarea.blurred {
+    filter: blur(8px);
+    pointer-events: none;
+    user-select: none;
+}
+
+/* ===== TEXTO AYUDA ===== */
+.help-text {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 8px;
+    font-style: italic;
+}
+
+/* ===== BOTONES ===== */
 button {
-    margin-top: 12px;
-    padding: 12px 26px;
-    border: none;
-    border-radius: 25px;
-    background: linear-gradient(45deg, #ff1744, #ff9100);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    font-size: 15px;
-    font-weight: bold;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.1em;
+    border-radius: 8px;
     cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    font-weight: bold;
+    margin-top: 10px;
+    width: 100%;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
-    opacity: 0.9;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
 }
 
-/* =========================
-   LINKS DE SORTEO
-========================= */
-#links p {
-    background: #fff3e0;
-    padding: 12px;
+.btn-secondary {
+    background: #6c757d;
+}
+
+.btn-secondary:hover {
+    box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+}
+
+/* BOTÓN TOGGLE BLUR */
+.btn-toggle {
+    background: #f39c12;
+}
+
+.btn-toggle:hover {
+    box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
+}
+
+/* ===== MENSAJES ===== */
+.success-message {
+    background: #2ecc71;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.warning {
+    background: #fff3cd;
+    border: 2px solid #ffc107;
+    color: #856404;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.error-card {
+    background: #ff4757;
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+/* ===== RESULTADOS PARTICIPANTE ===== */
+.result-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.result-card h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.result-name {
+    font-size: 3em;
+    font-weight: bold;
+    margin: 20px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.result-mission {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 20px;
     border-radius: 10px;
-    margin: 8px 0;
-    border-left: 5px solid #ff6f00;
-    word-break: break-all;
+    margin-top: 30px;
+    font-size: 1.2em;
+    line-height: 1.6;
 }
 
-/* =========================
-   EMOJIS CAYENDO
-========================= */
+/* ===== LINKS ===== */
+.links-output {
+    background: white;
+    border: 2px solid #667eea;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.link-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+.link-name {
+    font-weight: bold;
+    color: #764ba2;
+}
+
+/* ===== GRUPO DE BOTONES ===== */
+.button-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+/* ===== EMOJIS CAYENDO ===== */
 .snow {
     position: fixed;
     top: -50px;
     color: white;
-    font-size: 22px;
     pointer-events: none;
     animation: snowFall linear infinite;
     z-index: 0;
