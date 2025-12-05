@@ -110,18 +110,34 @@
         function renderAdmin() {
             const app = document.getElementById("app");
             app.innerHTML = `
-        <h2>Participantes</h2>
-        <textarea id="participantes" rows="8" style="width: 100%">${CONFIG.participantes.join("\n")}</textarea>
-        <button onclick="guardarParticipantes()">Guardar</button>
+            <h2>👥 Participantes</h2>
+            <textarea id="participantes" rows="8" style="width: 100%">${CONFIG.participantes.join("\n")}</textarea>
+            <button onclick="guardarParticipantes()">Guardar</button>
 
-        <h2>Misiones</h2>
-        <textarea id="misiones" rows="8" style="width: 100%">${CONFIG.misiones.join("\n")}</textarea>
-        <button onclick="guardarMisiones()">Guardar</button>
+            <div class="h2-with-btn">
+                <h2>🎯 Misiones</h2>
+                <button class="btn-toggle-blur" onclick="toggleMisionesBlur()">👁️ Ver Misiones</button>
+            </div>
+            <textarea id="misiones" rows="8" class="missions-textarea blurred" style="width: 100%">${CONFIG.misiones.join("\n")}</textarea>
+            <button onclick="guardarMisiones()">Guardar</button>
 
-        <h2>Sorteo</h2>
-        <button onclick="generarEnlaces()">Generar Enlaces</button>
-        <div id="links"></div>
-      `;
+            <h2>🎲 Generar Sorteo</h2>
+            <button onclick="generarEnlaces()">Generar Enlaces</button>
+            <div id="links"></div>
+            `;
+        }
+
+        function toggleMisionesBlur() {
+            const textarea = document.getElementById("misiones");
+            const btn = document.querySelector(".btn-toggle-blur");
+
+            if (textarea.classList.contains("blurred")) {
+                textarea.classList.remove("blurred");
+                btn.textContent = "🔒 Ocultar Misiones";
+            } else {
+                textarea.classList.add("blurred");
+                btn.textContent = "👁️ Ver Misiones";
+            }
         }
 
         function renderParticipante(token) {
@@ -134,10 +150,23 @@
             }
 
             app.innerHTML = `
-        <h1>Hola ${data.n}</h1>
-        <h2>Tu amigo invisible es: ${data.a}</h2>
-        <h3>Tu misión: ${data.m}</h3>
-      `;
+                <div class="participant-view">
+                    <div class="greeting">
+                        <h1>¡Hola ${data.n}! 👋</h1>
+                    </div>
+
+                    <div class="result-card">
+                        <div class="result-label">Tu amigo invisible es:</div>
+                        <div class="result-name">${data.a}</div>
+                    </div>
+
+                    <div class="mission-card">
+                        <div class="mission-label">Tu misión:</div>
+                        <div class="mission-text">${data.m}</div>
+                        <div class="mission-hint">🤫 ¡ALERTA DE MISIÓN SECRETA! 🕵️‍♀️ Para ganar un premio debes completar la misión antes de las 00:00 HS y no ser descubierto.</div>
+                    </div>
+                </div>
+            `;
         }
 
         // ========================
@@ -172,9 +201,48 @@
             const base = location.origin + location.pathname;
             const div = document.getElementById("links");
 
-            div.innerHTML = resultados.map(r =>
-                `<p><strong>${r.nombre}</strong>:<br>${base}?token=${r.token}</p>`
-            ).join("");
+            div.innerHTML = `
+                <div class="links-container">
+                    <h3>📧 Enlaces de Acceso</h3>
+                    <div class="links-list">
+                        ${resultados.map((r, idx) => `
+                            <div class="link-card">
+                                <div class="link-number">${idx + 1}</div>
+                                <div class="link-details">
+                                    <div class="link-name">👤 ${r.nombre}</div>
+                                    <div class="link-url">
+                                        <code>${base}?token=${r.token}</code>
+                                    </div>
+                                    <button class="btn-copy" onclick="copiarAlPortapapeles('${base}?token=${r.token}')">📋 Copiar</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="btn-export" onclick="exportarEnlaces('${base}', ${JSON.stringify(resultados)})">💾 Exportar todos</button>
+                </div>
+            `;
+        }
+
+        function copiarAlPortapapeles(texto) {
+            navigator.clipboard.writeText(texto).then(() => {
+                alert("Enlace copiado al portapapeles");
+            });
+        }
+
+        function exportarEnlaces(base, resultados) {
+            let contenido = "Enlaces del Amigo Invisible 2025\n";
+            contenido += "================================\n\n";
+            resultados.forEach((r, idx) => {
+                contenido += `${idx + 1}. ${r.nombre}\n`;
+                contenido += `${base}?token=${r.token}\n\n`;
+            });
+
+            const blob = new Blob([contenido], { type: "text/plain" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "enlaces-amigo-invisible.txt";
+            a.click();
         }
 
         // ========================
