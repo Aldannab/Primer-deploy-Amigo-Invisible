@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎄 Amigo Invisible Navidad 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        h2 {
+            color: #764ba2;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: monospace;
+            resize: vertical;
+            transition: filter 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea.blurred {
+            filter: blur(8px);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .help-text {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .result-card h2 {
+            color: white;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .result-name {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .result-mission {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+
+        .links-output {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .link-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .link-item:last-child {
+            border-bottom: none;
+        }
+
+        .link-name {
+            font-weight: bold;
+            color: #764ba2;
+        }
+
+        .error-card {
+            background: #ff4757;
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .success-message {
+            background: #2ecc71;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            margin-top: 5px;
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+        }
+
+        .btn-toggle {
+            background: #f39c12;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .btn-toggle:hover {
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .button-group button {
+            width: 100%;
+            margin-top: 0;
+        }
+
+        .santa-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .santa {
+            position: absolute;
+            font-size: 40px;
+            /* Animación de caída vertical */
+            animation: fall linear infinite;
+            will-change: transform, top;
+        }
+
+        /* Cambié la animación para que solo se mueva en el eje Y (caída)
+           y mantenga la posición horizontal fija (se establecerá con `left`). */
+        @keyframes fall {
+            0% {
+                transform: translateY(-120px) rotate(0deg);
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(calc(100vh + 120px)) rotate(15deg);
+                opacity: 0.95;
+            }
+        }
+
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s;
+            pointer-events: all;
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+        }
+
+        .music-control:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="app">
+        <!-- Contenido dinámico generado por JavaScript -->
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURACIÓN INICIAL (valores por defecto)
+        // ============================================
+
+        const CONFIG_INICIAL = {
+            participantes: [
+                "Ana",
+                "Carlos",
+                "María",
+                "Juan",
+                "Laura",
+                "Pedro"
+            ],
+
+            misiones: [
+                "Cantá un villancico en la cena de Navidad",
+                "Hacé un brindis emocional antes de abrir los regalos",
+                "Contá la anécdota más vergonzosa que tengas del año",
+                "Llevá puesto algo ridículo durante toda la cena",
+                "Hablá solo en rima durante 10 minutos",
+                "Regalale un abrazo de 30 segundos a cada persona presente"
+            ]
+        };
+
+        // Estado actual (se carga desde localStorage)
+        let CONFIG = {
+            participantes: [],
+            misiones: []
+        };
+
+        // Estado de la UI
+        let misionesBlurred = true;
+
+        // ============================================
+        // FUNCIONES DE CODIFICACIÓN DE TOKENS
+        // ============================================
+
+        function codificarToken(nombre, amigoInvisible, mision) {
+            const datos = {
+                n: nombre,
+                a: amigoInvisible,
+                m: mision
+            };
+            const jsonString = JSON.stringify(datos);
+            return btoa(encodeURIComponent(jsonString));
+        }
+
+        function decodificarToken(token) {
+            try {
+                const jsonString = decodeURIComponent(atob(token));
+                const datos = JSON.parse(jsonString);
+                return {
+                    nombre: datos.n,
+                    amigoInvisible: datos.a,
+                    mision: datos.m
+                };
+            } catch (error) {
+                return null;
+            }
+        }
+
+        // ============================================
+        // FUNCIONES DE STORAGE (localStorage)
+        // ============================================
+
+        function cargarDesdeLocalStorage() {
+            try {
+                const participantesGuardados = localStorage.getItem('amigo_invisible_participantes');
+                if (participantesGuardados) {
+                    CONFIG.participantes = JSON.parse(participantesGuardados);
+                } else {
+                    CONFIG.participantes = [...CONFIG_INICIAL.participantes];
+                }
+
+                const misionesGuardadas = localStorage.getItem('amigo_invisible_misiones');
+                if (misionesGuardadas) {
+                    CONFIG.misiones = JSON.parse(misionesGuardadas);
+                } else {
+                    CONFIG.misiones = [...CONFIG_INICIAL.misiones];
+                }
+
+                return true;
+            } catch (error) {
+                console.error('Error cargando desde localStorage:', error);
+                CONFIG.participantes = [...CONFIG_INICIAL.participantes];
+                CONFIG.misiones = [...CONFIG_INICIAL.misiones];
+                return false;
+            }
+        }
+
+        function guardarParticipantesEnStorage() {
+            try {
+                localStorage.setItem('amigo_invisible_participantes', JSON.stringify(CONFIG.participantes));
+                return true;
+            } catch (error) {
+                console.error('Error guardando participantes:', error);
+                return false;
+            }
+        }
+
+        function guardarMisionesEnStorage() {
+            try {
+                localStorage.setItem('amigo_invisible_misiones', JSON.stringify(CONFIG.misiones));
+                return true;
+            } catch (error) {
+                console.error('Error guardando misiones:', error);
+                return false;
+            }
+        }
+
+        function limpiarStorage() {
+            try {
+                localStorage.removeItem('amigo_invisible_participantes');
+                localStorage.removeItem('amigo_invisible_misiones');
+                return true;
+            } catch (error) {
+                console.error('Error limpiando storage:', error);
+                return false;
+            }
+        }
+
+        // ============================================
+        // FUNCIONES AUXILIARES
+        // ============================================
+
+        function realizarSorteo() {
+            const participantes = [...CONFIG.participantes];
+            const asignaciones = [];
+            let intentos = 0;
+            const maxIntentos = 1000;
+
+            while (intentos < maxIntentos) {
+                asignaciones.length = 0;
+                const disponibles = [...participantes];
+                let valido = true;
+
+                for (let i = 0; i < participantes.length; i++) {
+                    const participante = participantes[i];
+                    const opciones = disponibles.filter(p => p !== participante);
+
+                    if (opciones.length === 0) {
+                        valido = false;
+                        break;
+                    }
+
+                    const asignado = opciones[Math.floor(Math.random() * opciones.length)];
+                    asignaciones.push(asignado);
+                    disponibles.splice(disponibles.indexOf(asignado), 1);
+                }
+
+                if (valido) {
+                    return asignaciones;
+                }
+
+                intentos++;
+            }
+
+            throw new Error("No se pudo realizar un sorteo válido. Intentá de nuevo.");
+        }
+
+        function asignarMisiones() {
+            const misiones = [...CONFIG.misiones];
+            const asignadas = [];
+
+            for (let i = 0; i < CONFIG.participantes.length; i++) {
+                if (misiones.length === 0) {
+                    misiones.push(...CONFIG.misiones);
+                }
+                const idx = Math.floor(Math.random() * misiones.length);
+                asignadas.push(misiones[idx]);
+                misiones.splice(idx, 1);
+            }
+
+            return asignadas;
+        }
+
+        function generarResultados() {
+            try {
+                const asignaciones = realizarSorteo();
+                const misiones = asignarMisiones();
+
+                const resultados = CONFIG.participantes.map((participante, idx) => ({
+                    nombre: participante,
+                    amigoInvisible: asignaciones[idx],
+                    mision: misiones[idx],
+                    token: codificarToken(participante, asignaciones[idx], misiones[idx])
+                }));
+
+                return resultados;
+            } catch (error) {
+                alert(error.message);
+                return null;
+            }
+        }
+
+        function obtenerURLBase() {
+            return window.location.origin + window.location.pathname;
+        }
+
+        function copiarAlPortapapeles(texto) {
+            const textarea = document.createElement('textarea');
+            textarea.value = texto;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        }
+
+        // ============================================
+        // RENDERIZADO DE VISTAS
+        // ============================================
+
+        function renderModoAdmin() {
+            const app = document.getElementById('app');
+
+            app.innerHTML = `
+                <h1>🎄 Amigo Invisible 2025🎄</h1>
+                <p class="subtitle">Panel de Administración Colaborativo</p>
+
+
+                <div class="section">
+                    <h2>👥 Participantes</h2>
+                    <textarea id="participantesInput">${CONFIG.participantes.join('\n')}</textarea>
+                    <p class="help-text">Un nombre por línea.</p>
+                    <button onclick="guardarParticipantes()">💾 Guardar Participantes</button>
+                </div>
+
+                <div class="section">
+                    <h2>🎯 Misiones (para Camilo)</h2>
+                    <button class="btn-toggle" onclick="toggleBlurMisiones()">
+                        👁️ ${misionesBlurred ? 'Mostrar' : 'Ocultar'} Misiones
+                    </button>
+                    <textarea id="misionesInput" class="${misionesBlurred ? 'blurred' : ''}">${CONFIG.misiones.join('\n')}</textarea>
+                    <p class="help-text">Una misión por línea. (Cami, esta parte la editas vos)</p>
+                    <button onclick="guardarMisiones()">💾 Guardar Misiones</button>
+                </div>
+
+                <div class="section">
+                    <h2>🎲 Generar Sorteo</h2>
+                    <p class="help-text">Generá el sorteo y los enlaces únicos para cada participante</p>
+                    <button onclick="generarYMostrarEnlaces()">✨ Generar Sorteo y Enlaces</button>
+                    
+                    <div id="enlacesOutput"></div>
+                </div>
+
+                <div class="section">
+                    <h2>⚙️ Administración</h2>
+                    <p class="help-text">Herramientas avanzadas</p>
+                    <div class="button-group">
+                        <button class="btn-secondary" onclick="recargarDatos()">🔄 Recargar Datos</button>
+                        <button class="btn-secondary" onclick="resetearTodo()">🗑️ Resetear Todo</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderModoParticipante(token) {
+            const resultado = decodificarToken(token);
+            const app = document.getElementById('app');
+
+            if (!resultado) {
+                app.innerHTML = `
+                    <div class="error-card">
+                        <h2>❌ Enlace Inválido</h2>
+                        <p style="margin-top: 20px; font-size: 1.2em;">
+                            Este enlace no es válido o ha expirado.
+                        </p>
+                        <p style="margin-top: 15px;">
+                            Pedile a la organizadora que te envíe tu enlace correcto.
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Agregar Papá Noeles voladores
+            crearPapaNoelesVoladores();
+
+            // Agregar música navideña
+            agregarMusicaNavidena();
+
+            app.innerHTML = `
+                <div class="result-card">
+                    <h2>🎁 ¡Hola ${resultado.nombre}!</h2>
+                    <p style="font-size: 1.3em; margin-top: 10px;">Tu amigo invisible es...</p>
+                    <div class="result-name">🎅 ${resultado.amigoInvisible}</div>
+                    
+                    <div class="result-mission">
+                        <strong style="font-size: 1.3em;">🎯 Tu misión secreta para cumplir antes de las 00:00hs (sin que tu amigo invisible te descubra) es:</strong>
+                        <p style="margin-top: 15px;">${resultado.mision}</p>
+                    </div>
+
+                    <p style="margin-top: 30px; font-size: 1.1em; opacity: 0.9;">
+                        ¡Recordá cumplir tu misión para ganar tu premio! 🎄
+                    </p>
+                </div>
+            `;
+        }
+
+        // ============================================
+        // ANIMACIONES Y MÚSICA NAVIDEÑA
+        // ============================================
+
+        function crearPapaNoelesVoladores() {
+            // Verificar si ya existe el contenedor
+            if (document.querySelector('.santa-container')) return;
+
+            const container = document.createElement('div');
+            container.className = 'santa-container';
+            document.body.appendChild(container);
+
+            // Crear varios Papá Noeles con diferentes velocidades y alturas
+            const numSantas = 8;
+            const santaEmojis = ['🎅', '🤶', '🎅', '🦌', '🎅', '⛄', '🎅', '🎁'];
+
+            for (let i = 0; i < numSantas; i++) {
+                const santa = document.createElement('div');
+                santa.className = 'santa';
+                santa.textContent = santaEmojis[i];
+
+                // Posición inicial: left aleatorio (ancho) y top por encima de la pantalla
+                const randomX = Math.random() * 95; // 0-95% del ancho
+                santa.style.left = `${randomX}%`;
+                santa.style.top = `-10%`; // empezar por encima de la ventana para dar efecto de caída
+
+                // Duración aleatoria de la animación (más lento = más tiempo)
+                const duration = 15 + Math.random() * 20; // 15-35 segundos
+                santa.style.animationDuration = `${duration}s`;
+
+                // Delay aleatorio para que no empiecen todos juntos
+                const delay = Math.random() * 10;
+                santa.style.animationDelay = `${delay}s`;
+
+                container.appendChild(santa);
+            }
+        }
+
+        function agregarMusicaNavidena() {
+            // Verificar si ya existe el audio
+            if (document.getElementById('christmas-music')) return;
+
+            // Crear elemento de audio
+            const audio = document.createElement('audio');
+            audio.id = 'christmas-music';
+            audio.loop = true;
+            audio.volume = 0.3; // Volumen al 30% para que no sea molesto
+
+            // Usar Jingle Bells de Free Music Archive (dominio público)
+            audio.src = 'https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js';
+
+            // Como no podemos usar archivos externos de música fácilmente,
+            // vamos a crear un jingle simple usando Web Audio API
+            crearJingleNavideno();
+
+            // Crear botón de control
+            const button = document.createElement('button');
+            button.className = 'music-control';
+            button.innerHTML = '🔇';
+            button.title = 'Reproducir música';
+            button.onclick = toggleMusic;
+
+            document.body.appendChild(button);
+        }
+
+        function crearJingleNavideno() {
+            // Intentar reproducir música usando Tone.js
+            try {
+                const synth = new Tone.Synth({
+                    oscillator: { type: 'triangle' },
+                    envelope: {
+                        attack: 0.005,
+                        decay: 0.1,
+                        sustain: 0.3,
+                        release: 1
+                    }
+                }).toDestination();
+
+                // Melodía de Jingle Bells simplificada
+                const melody = [
+                    { note: 'E4', duration: '4n' },
+                    { note: 'E4', duration: '4n' },
+                    { note: 'E4', duration: '2n' },
+                    { note: 'E4', duration: '4n' },
+                    { note: 'E4', duration: '4n' },
+                    { note: 'E4', duration: '2n' },
+                    { note: 'E4', duration: '4n' },
+                    { note: 'G4', duration: '4n' },
+                    { note: 'C4', duration: '4n' },
+                    { note: 'D4', duration: '4n' },
+                    { note: 'E4', duration: '1n' }
+                ];
+
+                let isPlaying = false;
+                let currentIndex = 0;
+
+                window.playChristmasMusic = async function () {
+                    if (isPlaying) return;
+                    await Tone.start();
+                    isPlaying = true;
+
+                    function playNote() {
+                        if (!isPlaying || currentIndex >= melody.length) {
+                            currentIndex = 0;
+                            if (isPlaying) {
+                                setTimeout(playNote, 2000); // Pausa entre repeticiones
+                            }
+                            return;
+                        }
+
+                        const { note, duration } = melody[currentIndex];
+                        synth.triggerAttackRelease(note, duration);
+                        currentIndex++;
+
+                        const durationMs = Tone.Time(duration).toMilliseconds();
+                        setTimeout(playNote, durationMs);
+                    }
+
+                    playNote();
+                };
+
+                window.stopChristmasMusic = function () {
+                    isPlaying = false;
+                };
+
+            } catch (error) {
+                console.log('Tone.js no disponible, música deshabilitada');
+            }
+        }
+
+        function toggleMusic() {
+            const button = document.querySelector('.music-control');
+
+            if (typeof window.playChristmasMusic === 'function') {
+                if (button.innerHTML === '🔇') {
+                    window.playChristmasMusic();
+                    button.innerHTML = '🔊';
+                    button.title = 'Pausar música';
+                } else {
+                    window.stopChristmasMusic();
+                    button.innerHTML = '🔇';
+                    button.title = 'Reproducir música';
+                }
+            }
+        }
+
+        // ============================================
+        // FUNCIONES DE INTERACCIÓN
+        // ============================================
+
+        function toggleBlurMisiones() {
+            misionesBlurred = !misionesBlurred;
+            const textarea = document.getElementById('misionesInput');
+            const button = event.target;
+
+            if (misionesBlurred) {
+                textarea.classList.add('blurred');
+                button.textContent = '👁️ Mostrar Misiones';
+            } else {
+                textarea.classList.remove('blurred');
+                button.textContent = '👁️ Ocultar Misiones';
+            }
+        }
+
+        function guardarParticipantes() {
+            const input = document.getElementById('participantesInput').value;
+            const participantes = input.split('\n').map(p => p.trim()).filter(p => p.length > 0);
+
+            if (participantes.length < 3) {
+                alert('Necesitás al menos 3 participantes para el sorteo');
+                return;
+            }
+
+            CONFIG.participantes = participantes;
+
+            const exito = guardarParticipantesEnStorage();
+            const output = document.getElementById('enlacesOutput');
+
+            if (exito) {
+                output.innerHTML = '<div class="success-message">✅ Participantes guardados correctamente</div>';
+            } else {
+                output.innerHTML = '<div class="error-card">❌ Error guardando participantes</div>';
+            }
+        }
+
+        function guardarMisiones() {
+            const input = document.getElementById('misionesInput').value;
+            const misiones = input.split('\n').map(m => m.trim()).filter(m => m.length > 0);
+
+            if (misiones.length < CONFIG.participantes.length) {
+                alert(`Necesitás al menos ${CONFIG.participantes.length} misiones (una por participante)`);
+                return;
+            }
+
+            CONFIG.misiones = misiones;
+
+            const exito = guardarMisionesEnStorage();
+            const output = document.getElementById('enlacesOutput');
+
+            if (exito) {
+                output.innerHTML = '<div class="success-message">✅ Misiones guardadas correctamente</div>';
+            } else {
+                output.innerHTML = '<div class="error-card">❌ Error guardando misiones</div>';
+            }
+        }
+
+        function generarYMostrarEnlaces() {
+            if (CONFIG.participantes.length < 3) {
+                alert('Primero guardá al menos 3 participantes');
+                return;
+            }
+
+            if (CONFIG.misiones.length < CONFIG.participantes.length) {
+                alert('Primero guardá suficientes misiones');
+                return;
+            }
+
+            const resultados = generarResultados();
+            if (!resultados) return;
+
+            const urlBase = obtenerURLBase();
+            let html = '<div class="success-message">✅ ¡Sorteo realizado con éxito!</div>';
+            html += '<div class="links-output">';
+
+            resultados.forEach(r => {
+                const enlace = `${urlBase}?token=${r.token}`;
+                html += `
+                    <div class="link-item">
+                        <div class="link-name">${r.nombre}</div>
+                        <div style="margin-top: 5px; word-break: break-all;">${enlace}</div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            html += '<button onclick="copiarTodosLosEnlaces()">📋 Copiar Todos los Enlaces</button>';
+            html += '<button class="btn-secondary" onclick="descargarCSV()">📥 Descargar CSV</button>';
+
+            document.getElementById('enlacesOutput').innerHTML = html;
+
+            // Guardar los resultados temporalmente para poder copiarlos
+            window.ultimosResultados = resultados;
+        }
+
+        function copiarTodosLosEnlaces() {
+            if (!window.ultimosResultados) {
+                alert('❌ Primero generá el sorteo');
+                return;
+            }
+
+            const urlBase = obtenerURLBase();
+            let texto = 'ENLACES AMIGO INVISIBLE - ENVIAR POR WHATSAPP\n';
+            texto += '='.repeat(50) + '\n\n';
+
+            window.ultimosResultados.forEach(r => {
+                const enlace = `${urlBase}?token=${r.token}`;
+                texto += `${r.nombre}:\n${enlace}\n\n`;
+            });
+
+            copiarAlPortapapeles(texto);
+            alert('✅ Enlaces copiados al portapapeles. Ahora podés pegarlos en WhatsApp');
+        }
+
+        function descargarCSV() {
+            if (!window.ultimosResultados) {
+                alert('❌ Primero generá el sorteo');
+                return;
+            }
+
+            const urlBase = obtenerURLBase();
+            let csv = 'Nombre,Enlace\n';
+
+            window.ultimosResultados.forEach(r => {
+                const enlace = `${urlBase}?token=${r.token}`;
+                csv += `"${r.nombre}","${enlace}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'amigo-invisible-enlaces.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        function recargarDatos() {
+            cargarDesdeLocalStorage();
+            renderModoAdmin();
+            alert('✅ Datos recargados');
+        }
+
+        function resetearTodo() {
+            if (!confirm('⚠️ ¿Estás segura? Esto borrará TODOS los datos guardados (participantes y misiones). Esta acción no se puede deshacer.')) {
+                return;
+            }
+
+            if (!confirm('🔴 ÚLTIMA CONFIRMACIÓN: ¿Realmente querés borrar todo y empezar de cero?')) {
+                return;
+            }
+
+            limpiarStorage();
+
+            CONFIG.participantes = [...CONFIG_INICIAL.participantes];
+            CONFIG.misiones = [...CONFIG_INICIAL.misiones];
+
+            renderModoAdmin();
+            alert('🗑️ Todo resetado. Empezá de nuevo con datos limpios.');
+        }
+
+        // ============================================
+        // INICIALIZACIÓN
+        // ============================================
+
+        function init() {
+            cargarDesdeLocalStorage();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+
+            if (token) {
+                renderModoParticipante(token);
+            } else {
+                renderModoAdmin();
+            }
+        }
+
+        // Ejecutar al cargar la página
+        init();
+    </script>
+</body>
+
+</html>
