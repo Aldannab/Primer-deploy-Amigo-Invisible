@@ -4,7 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <title>🎄 Amigo Invisible 2025</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
+
 
 <body>
 
@@ -191,6 +194,26 @@
         }
 
         init();
+
+        const emojis = ["🎄", "❄️", "🎅", "🎁", "⭐", "☃️"];
+
+        function crearEmoji() {
+            const snow = document.createElement("div");
+            snow.classList.add("snow");
+            snow.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+
+            snow.style.left = Math.random() * 100 + "vw";
+            snow.style.animationDuration = 5 + Math.random() * 5 + "s";
+            snow.style.fontSize = 18 + Math.random() * 20 + "px";
+
+            document.body.appendChild(snow);
+
+            setTimeout(() => {
+                snow.remove();
+            }, 11000);
+        }
+
+        setInterval(crearEmoji, 350);
     </script>
 
 </body>
