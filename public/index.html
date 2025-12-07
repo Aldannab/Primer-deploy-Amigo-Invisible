@@ -17,6 +17,15 @@
         let CONFIG = { participantes: [], misiones: [] };
 
         // ========================
+        // REGLAS DE EXCLUSIÓN
+        // ========================
+        // Personas que NO pueden recibir a ciertos participantes
+        const EXCLUSIONES = {
+            // Mock: estas personas NO pueden recibir "Felipe"
+            "Felipe": ["Persona1", "Persona2"] // TODO: Modificar con los nombres reales
+        };
+
+        // ========================
         // SUPABASE BACKEND REAL
         // ========================
 
@@ -87,7 +96,26 @@
             const asignaciones = [];
 
             participantes.forEach(p => {
-                const opciones = disponibles.filter(x => x !== p);
+                // Filtrar opciones: no puede ser él mismo y respetar exclusiones
+                const opciones = disponibles.filter(x => {
+                    if (x === p) return false; // No puede ser él mismo
+                    
+                    // Verificar exclusiones: si esta persona (p) está en la lista de exclusiones de x
+                    for (const [personaExcluida, personasQueNoPuedenRecibirla] of Object.entries(EXCLUSIONES)) {
+                        if (x === personaExcluida && personasQueNoPuedenRecibirla.includes(p)) {
+                            return false; // Esta persona no puede recibir a x
+                        }
+                    }
+                    
+                    return true;
+                });
+
+                if (opciones.length === 0) {
+                    // Si no hay opciones válidas, reintentar el sorteo completo
+                    console.warn("No hay opciones válidas, reintentando sorteo...");
+                    return realizarSorteo();
+                }
+
                 const elegido = opciones[Math.floor(Math.random() * opciones.length)];
                 asignaciones.push(elegido);
                 disponibles.splice(disponibles.indexOf(elegido), 1);
