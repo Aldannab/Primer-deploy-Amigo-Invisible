@@ -119,10 +119,25 @@
         }
 
         function asignarMisiones() {
-            return CONFIG.participantes.map(() => {
-                const i = Math.floor(Math.random() * CONFIG.misiones.length);
-                return CONFIG.misiones[i];
-            });
+            if (CONFIG.misiones.length < CONFIG.participantes.length) {
+                return null; // No hay suficientes misiones
+            }
+            
+            const misionesDisponibles = [...CONFIG.misiones];
+            const misionesAsignadas = [];
+            
+            // Mezclar aleatoriamente
+            for (let i = misionesDisponibles.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [misionesDisponibles[i], misionesDisponibles[j]] = [misionesDisponibles[j], misionesDisponibles[i]];
+            }
+            
+            // Asignar una misión única a cada participante
+            for (let i = 0; i < CONFIG.participantes.length; i++) {
+                misionesAsignadas.push(misionesDisponibles[i]);
+            }
+            
+            return misionesAsignadas;
         }
 
         function renderAdmin() {
@@ -202,9 +217,19 @@
         }
 
         function generarEnlaces() {
+            if (CONFIG.misiones.length < CONFIG.participantes.length) {
+                alert(`Error: Necesitas al menos ${CONFIG.participantes.length} misiones (tienes ${CONFIG.misiones.length}). Cada persona debe tener una misión única.`);
+                return;
+            }
+            
             const asignaciones = realizarSorteo();
             if (!asignaciones || asignaciones.length !== CONFIG.participantes.length) return;
+            
             const misiones = asignarMisiones();
+            if (!misiones || misiones.length !== CONFIG.participantes.length) {
+                alert("Error: No se pudieron asignar misiones únicas. Verifica que tengas suficientes misiones.");
+                return;
+            }
 
             const resultados = CONFIG.participantes.map((p, i) => ({
                 nombre: p,
@@ -277,17 +302,33 @@
                     
                     if (CONFIG.participantes.length === 0) {
                         console.warn("⚠️ No hay participantes cargados. Carga participantes primero.");
+                    } else if (CONFIG.misiones.length < CONFIG.participantes.length) {
+                        console.warn(`⚠️ No hay suficientes misiones. Necesitas ${CONFIG.participantes.length}, tienes ${CONFIG.misiones.length}.`);
                     } else {
                         const asignaciones = realizarSorteo();
                         if (!asignaciones) {
                             console.error("❌ FALLO: No se pudo realizar el sorteo");
                         } else {
-                            const ok = !asignaciones.some(a => !a || a === undefined) &&
-                                       asignaciones.length === CONFIG.participantes.length &&
-                                       !asignaciones.some((a, i) => a === CONFIG.participantes[i]) &&
-                                       new Set(asignaciones).size === asignaciones.length;
-                            console.log(ok ? "✅ Tests OK" : "❌ Tests FALLARON");
-                            console.log("Resultados:", asignaciones);
+                            const misiones = asignarMisiones();
+                            if (!misiones) {
+                                console.error("❌ FALLO: No se pudieron asignar misiones");
+                            } else {
+                                const okSorteo = !asignaciones.some(a => !a || a === undefined) &&
+                                               asignaciones.length === CONFIG.participantes.length &&
+                                               !asignaciones.some((a, i) => a === CONFIG.participantes[i]) &&
+                                               new Set(asignaciones).size === asignaciones.length;
+                                
+                                const okMisiones = misiones.length === CONFIG.participantes.length &&
+                                                   new Set(misiones).size === misiones.length;
+                                
+                                const ok = okSorteo && okMisiones;
+                                
+                                console.log(ok ? "✅ Tests OK" : "❌ Tests FALLARON");
+                                console.log("  Sorteo:", okSorteo ? "✅" : "❌");
+                                console.log("  Misiones únicas:", okMisiones ? "✅" : "❌");
+                                console.log("Asignaciones:", asignaciones);
+                                console.log("Misiones:", misiones);
+                            }
                         }
                     }
                 }
