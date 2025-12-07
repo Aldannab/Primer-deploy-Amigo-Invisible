@@ -21,8 +21,8 @@
         // ========================
         // Personas que NO pueden recibir a ciertos participantes
         const EXCLUSIONES = {
-            // Mock: estas personas NO pueden recibir "Felipe"
-            "Felipe": ["Persona1", "Persona2"] // TODO: Modificar con los nombres reales
+            // Mock: estas personas NO pueden recibir "Feli"
+            "Feli": ["Romi", "Lu", "Gabi", "Juli", "Santi", "Tobi", "Aldi"] // TODO: Modificar con los nombres reales
         };
 
         // ========================
@@ -99,14 +99,14 @@
                 // Filtrar opciones: no puede ser él mismo y respetar exclusiones
                 const opciones = disponibles.filter(x => {
                     if (x === p) return false; // No puede ser él mismo
-                    
+
                     // Verificar exclusiones: si esta persona (p) está en la lista de exclusiones de x
                     for (const [personaExcluida, personasQueNoPuedenRecibirla] of Object.entries(EXCLUSIONES)) {
                         if (x === personaExcluida && personasQueNoPuedenRecibirla.includes(p)) {
                             return false; // Esta persona no puede recibir a x
                         }
                     }
-                    
+
                     return true;
                 });
 
