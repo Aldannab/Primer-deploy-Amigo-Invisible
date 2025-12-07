@@ -6,9 +6,6 @@
     <title>🎄 Amigo Invisible 2025</title>
     <link rel="stylesheet" href="./style.css">
 </head>
-
-
-
 <body>
 
     <div id="app"></div>
@@ -16,18 +13,9 @@
     <script>
         let CONFIG = { participantes: [], misiones: [] };
 
-        // ========================
-        // REGLAS DE EXCLUSIÓN
-        // ========================
-        // Personas que NO pueden recibir a ciertos participantes
         const EXCLUSIONES = {
-            // Mock: estas personas NO pueden recibir "Feli"
-            "Feli": ["Romi", "Lu", "Gabi", "Juli", "Santi", "Tobi", "Aldi"] // TODO: Modificar con los nombres reales
+            "Feli": ["Romi", "Lu", "Gabi", "Juli", "Santi", "Tobi", "Aldi"]
         };
-
-        // ========================
-        // SUPABASE BACKEND REAL
-        // ========================
 
         const SUPABASE_URL = "https://ruslvezwludgidivyajq.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1c2x2ZXp3bHVkZ2lkaXZ5YWpxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ5NDQyOTIsImV4cCI6MjA4MDUyMDI5Mn0.H4Hsnf4j4yQ80DtX4R6nypFaQ0Rgkx9sc4i6b7xnADo";
@@ -69,10 +57,6 @@
             });
         }
 
-        // ========================
-        // TOKEN
-        // ========================
-
         function codificarToken(nombre, amigoInvisible, mision) {
             return btoa(encodeURIComponent(JSON.stringify({ n: nombre, a: amigoInvisible, m: mision })));
         }
@@ -86,42 +70,52 @@
             }
         }
 
-        // ========================
-        // LÓGICA
-        // ========================
+        function puedeRecibir(participante, candidato) {
+            if (participante === candidato) return false;
+            for (const [personaExcluida, personasQueNoPuedenRecibirla] of Object.entries(EXCLUSIONES)) {
+                if (candidato === personaExcluida && personasQueNoPuedenRecibirla.includes(participante)) {
+                    return false;
+                }
+            }
+            return true;
+        }
 
         function realizarSorteo() {
             const participantes = [...CONFIG.participantes];
-            const disponibles = [...participantes];
-            const asignaciones = [];
+            const maxIntentos = 1000;
+            
+            for (let intento = 0; intento < maxIntentos; intento++) {
+                const disponibles = [...participantes];
+                const asignaciones = [];
+                let sorteoValido = true;
 
-            participantes.forEach(p => {
-                // Filtrar opciones: no puede ser él mismo y respetar exclusiones
-                const opciones = disponibles.filter(x => {
-                    if (x === p) return false; // No puede ser él mismo
-
-                    // Verificar exclusiones: si esta persona (p) está en la lista de exclusiones de x
-                    for (const [personaExcluida, personasQueNoPuedenRecibirla] of Object.entries(EXCLUSIONES)) {
-                        if (x === personaExcluida && personasQueNoPuedenRecibirla.includes(p)) {
-                            return false; // Esta persona no puede recibir a x
-                        }
-                    }
-
-                    return true;
-                });
-
-                if (opciones.length === 0) {
-                    // Si no hay opciones válidas, reintentar el sorteo completo
-                    console.warn("No hay opciones válidas, reintentando sorteo...");
-                    return realizarSorteo();
+                for (let i = participantes.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [disponibles[i], disponibles[j]] = [disponibles[j], disponibles[i]];
                 }
 
-                const elegido = opciones[Math.floor(Math.random() * opciones.length)];
-                asignaciones.push(elegido);
-                disponibles.splice(disponibles.indexOf(elegido), 1);
-            });
+                for (let i = 0; i < participantes.length; i++) {
+                    const opciones = disponibles.filter(c => puedeRecibir(participantes[i], c));
+                    if (opciones.length === 0) {
+                        sorteoValido = false;
+                        break;
+                    }
+                    const elegido = opciones[Math.floor(Math.random() * opciones.length)];
+                    asignaciones.push(elegido);
+                    disponibles.splice(disponibles.indexOf(elegido), 1);
+                }
 
-            return asignaciones;
+                if (sorteoValido && asignaciones.length === participantes.length) {
+                    const todosValidos = asignaciones.every((a, i) => 
+                        a && a !== participantes[i] && puedeRecibir(participantes[i], a)
+                    );
+                    if (todosValidos) return asignaciones;
+                }
+            }
+
+            console.error("No se pudo realizar un sorteo válido");
+            alert("Error: No se pudo realizar el sorteo. Revisa las reglas de exclusión.");
+            return null;
         }
 
         function asignarMisiones() {
@@ -130,10 +124,6 @@
                 return CONFIG.misiones[i];
             });
         }
-
-        // ========================
-        // UI
-        // ========================
 
         function renderAdmin() {
             const app = document.getElementById("app");
@@ -197,10 +187,6 @@
             `;
         }
 
-        // ========================
-        // ACCIONES
-        // ========================
-
         async function guardarParticipantes() {
             const input = document.getElementById("participantes").value;
             CONFIG.participantes = input.split("\n").map(x => x.trim()).filter(Boolean);
@@ -217,6 +203,7 @@
 
         function generarEnlaces() {
             const asignaciones = realizarSorteo();
+            if (!asignaciones || asignaciones.length !== CONFIG.participantes.length) return;
             const misiones = asignarMisiones();
 
             const resultados = CONFIG.participantes.map((p, i) => ({
@@ -273,19 +260,37 @@
             a.click();
         }
 
-        // ========================
-        // INIT
-        // ========================
-
         async function init() {
             const params = new URLSearchParams(window.location.search);
             const token = params.get("token");
+            const test = params.get("test");
 
             if (token) {
                 renderParticipante(token);
             } else {
                 await cargarDesdeServidor();
                 renderAdmin();
+                
+                if (test || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                    console.log("🧪 Ejecutando tests...");
+                    console.log("Participantes cargados:", CONFIG.participantes.length);
+                    
+                    if (CONFIG.participantes.length === 0) {
+                        console.warn("⚠️ No hay participantes cargados. Carga participantes primero.");
+                    } else {
+                        const asignaciones = realizarSorteo();
+                        if (!asignaciones) {
+                            console.error("❌ FALLO: No se pudo realizar el sorteo");
+                        } else {
+                            const ok = !asignaciones.some(a => !a || a === undefined) &&
+                                       asignaciones.length === CONFIG.participantes.length &&
+                                       !asignaciones.some((a, i) => a === CONFIG.participantes[i]) &&
+                                       new Set(asignaciones).size === asignaciones.length;
+                            console.log(ok ? "✅ Tests OK" : "❌ Tests FALLARON");
+                            console.log("Resultados:", asignaciones);
+                        }
+                    }
+                }
             }
         }
 
@@ -311,7 +316,5 @@
 
         setInterval(crearEmoji, 350);
     </script>
-
 </body>
-
 </html>
