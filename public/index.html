@@ -205,15 +205,37 @@
         async function guardarParticipantes() {
             const input = document.getElementById("participantes").value;
             CONFIG.participantes = input.split("\n").map(x => x.trim()).filter(Boolean);
-            await guardarParticipantesEnServidor();
-            alert("Participantes guardados");
+            
+            if (CONFIG.participantes.length === 0) {
+                alert("⚠️ No hay participantes para guardar");
+                return;
+            }
+            
+            try {
+                await guardarParticipantesEnServidor();
+                alert(`✅ Participantes guardados: ${CONFIG.participantes.length} participantes`);
+            } catch (error) {
+                console.error("Error al guardar participantes:", error);
+                alert("❌ Error al guardar participantes. Revisa la consola.");
+            }
         }
 
         async function guardarMisiones() {
             const input = document.getElementById("misiones").value;
             CONFIG.misiones = input.split("\n").map(x => x.trim()).filter(Boolean);
-            await guardarMisionesEnServidor();
-            alert("Misiones guardadas");
+            
+            if (CONFIG.misiones.length === 0) {
+                alert("⚠️ No hay misiones para guardar");
+                return;
+            }
+            
+            try {
+                await guardarMisionesEnServidor();
+                alert(`✅ Misiones guardadas: ${CONFIG.misiones.length} misiones`);
+            } catch (error) {
+                console.error("Error al guardar misiones:", error);
+                alert("❌ Error al guardar misiones. Revisa la consola.");
+            }
         }
 
         function generarEnlaces() {
